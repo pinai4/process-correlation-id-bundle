@@ -48,7 +48,7 @@ return [
 
 Monolog field name for ProcessCorrelationId value can be configured directly by
 creating a new `config/packages/pinai4_process_correlation_id.yaml` file. 
-You can also any moment enable/disable all bundle features in this file. The
+You can also enable/disable all bundle features from this file. The
 default values are:
 
 ```yaml

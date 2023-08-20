@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:pinai4-process-correlation-id="http://pinai4_project.com/schema/dic/process-correlation-id"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd
+        http://pinai4_project.com/schema/dic/process-correlation-id
+        http://pinai4_project.com/schema/dic/process-correlation-id-1.0.xsd"
+>
+    <pinai4-process-correlation-id:config>
+        <pinai4-process-correlation-id:enabled>true</pinai4-process-correlation-id:enabled>
+        <pinai4-process-correlation-id:log-field-name>field_name_from_xml_settings
+        </pinai4-process-correlation-id:log-field-name>
+    </pinai4-process-correlation-id:config>
+</container>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns="http://pinai4_project.com/schema/dic/process-correlation-id"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://pinai4_project.com/schema/dic/process-correlation-id"
+            elementFormDefault="qualified">
+
+    <xsd:element name="config" type="config"/>
+
+    <xsd:complexType name="config">
+        <xsd:sequence>
+            <xsd:element name="enabled" type="xsd:boolean" default="true"/>
+            <xsd:element name="log-field-name" type="xsd:string" default="process_correlation_id"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

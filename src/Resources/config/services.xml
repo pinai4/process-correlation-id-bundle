@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd"
+>
+    <services>
+        <service id="pinai4_process_correlation_id.id"
+                 class="Pinai4\ProcessCorrelationIdBundle\ProcessCorrelationId">
+        </service>
+
+        <service id="pinai4_process_correlation_id.event_listener.init_subscriber"
+                 class="Pinai4\ProcessCorrelationIdBundle\EventListener\InitProcessCorrelationIdSubscriber">
+            <argument type="service" id="pinai4_process_correlation_id.id"/>
+            <argument type="service" id="pinai4_process_correlation_id.monolog.processor"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="pinai4_process_correlation_id.messenger.add_stamp_middleware"
+                 class="Pinai4\ProcessCorrelationIdBundle\Messenger\AddProcessCorrelationIdStampMiddleware">
+            <argument type="service" id="pinai4_process_correlation_id.id"/>
+        </service>
+
+        <service id="pinai4_process_correlation_id.messenger.log_middleware"
+                 class="Pinai4\ProcessCorrelationIdBundle\Messenger\LogProcessCorrelationIdMiddleware">
+            <argument type="service" id="pinai4_process_correlation_id.monolog.processor"/>
+            <argument type="service" id="logger"/>
+        </service>
+
+        <service id="pinai4_process_correlation_id.monolog.processor"
+                 class="Pinai4\ProcessCorrelationIdBundle\Monolog\ProcessCorrelationIdProcessor">
+            <argument type="string"/>
+            <tag name="monolog.processor"/>
+        </service>
+    </services>
+</container>

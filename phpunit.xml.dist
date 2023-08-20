@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" colors="true"
+         cacheResultFile="tests/var/cache/.phpunit.result.cache"
+         bootstrap="./vendor/autoload.php">
+    <coverage>
+        <include>
+            <directory>./src</directory>
+        </include>
+    </coverage>
+    <testsuites>
+        <testsuite name="ProcessCorrelationIdBundle for the Symfony Framework">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+    </listeners>
+</phpunit>

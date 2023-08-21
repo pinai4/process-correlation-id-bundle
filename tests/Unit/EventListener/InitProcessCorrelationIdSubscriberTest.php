@@ -24,25 +24,26 @@ class InitProcessCorrelationIdSubscriberTest extends TestCase
     {
         $processCorrelationId = new ProcessCorrelationId();
 
-        $fieldName = 'some_field_name';
-        $processor = new ProcessCorrelationIdProcessor($fieldName);
+        $testFieldName = 'some_field_name';
+        $processor = new ProcessCorrelationIdProcessor($testFieldName);
 
         $subscriber = new InitProcessCorrelationIdSubscriber($processCorrelationId, $processor);
 
         $eventEventDispatcher = new EventDispatcher();
         $eventEventDispatcher->addSubscriber($subscriber);
 
-        $requestEvent = $this->createStub(RequestEvent::class);
-        $requestEvent->method('isMainRequest')
+        $requestEventStub = $this->createStub(RequestEvent::class);
+        $requestEventStub
+            ->method('isMainRequest')
             ->willReturn(true);
 
-        $eventEventDispatcher->dispatch($requestEvent, KernelEvents::REQUEST);
+        $eventEventDispatcher->dispatch($requestEventStub, KernelEvents::REQUEST);
 
         $this->assertTrue($processCorrelationId->isGenerated());
         $this->assertStringStartsWith('R-', $processCorrelationId->get());
 
         $this->assertSame([
-            'extra' => [$fieldName => $processCorrelationId->get()],
+            'extra' => [$testFieldName => $processCorrelationId->get()],
         ], $processor([]));
     }
 
@@ -50,19 +51,20 @@ class InitProcessCorrelationIdSubscriberTest extends TestCase
     {
         $processCorrelationId = new ProcessCorrelationId();
 
-        $fieldName = 'some_field_name';
-        $processor = new ProcessCorrelationIdProcessor($fieldName);
+        $testFieldName = 'some_field_name';
+        $processor = new ProcessCorrelationIdProcessor($testFieldName);
 
         $subscriber = new InitProcessCorrelationIdSubscriber($processCorrelationId, $processor);
 
         $eventEventDispatcher = new EventDispatcher();
         $eventEventDispatcher->addSubscriber($subscriber);
 
-        $requestEvent = $this->createStub(RequestEvent::class);
-        $requestEvent->method('isMainRequest')
+        $requestEventStub = $this->createStub(RequestEvent::class);
+        $requestEventStub
+            ->method('isMainRequest')
             ->willReturn(false);
 
-        $eventEventDispatcher->dispatch($requestEvent, KernelEvents::REQUEST);
+        $eventEventDispatcher->dispatch($requestEventStub, KernelEvents::REQUEST);
 
         $this->assertFalse($processCorrelationId->isGenerated());
 
@@ -73,8 +75,8 @@ class InitProcessCorrelationIdSubscriberTest extends TestCase
     {
         $processCorrelationId = new ProcessCorrelationId();
 
-        $fieldName = 'some_field_name';
-        $processor = new ProcessCorrelationIdProcessor($fieldName);
+        $testFieldName = 'some_field_name';
+        $processor = new ProcessCorrelationIdProcessor($testFieldName);
 
         $subscriber = new InitProcessCorrelationIdSubscriber($processCorrelationId, $processor);
 
@@ -94,7 +96,7 @@ class InitProcessCorrelationIdSubscriberTest extends TestCase
         $this->assertStringStartsWith('C-', $processCorrelationId->get());
 
         $this->assertSame([
-            'extra' => [$fieldName => $processCorrelationId->get()],
+            'extra' => [$testFieldName => $processCorrelationId->get()],
         ], $processor([]));
     }
 
@@ -102,8 +104,8 @@ class InitProcessCorrelationIdSubscriberTest extends TestCase
     {
         $processCorrelationId = new ProcessCorrelationId();
 
-        $fieldName = 'some_field_name';
-        $processor = new ProcessCorrelationIdProcessor($fieldName);
+        $testFieldName = 'some_field_name';
+        $processor = new ProcessCorrelationIdProcessor($testFieldName);
 
         $subscriber = new InitProcessCorrelationIdSubscriber($processCorrelationId, $processor);
 
@@ -111,9 +113,10 @@ class InitProcessCorrelationIdSubscriberTest extends TestCase
         $eventEventDispatcher->addSubscriber($subscriber);
 
         $commandStub = $this->createStub(Command::class);
-        $commandStub->method('getName')
+        $commandStub
+            ->method('getName')
             ->willReturn(ConsumeMessagesCommand::getDefaultName());
-        
+
         $consoleCommandEvent = new ConsoleCommandEvent(
             $commandStub,
             $this->createStub(InputInterface::class),

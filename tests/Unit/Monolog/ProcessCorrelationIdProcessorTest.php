@@ -11,33 +11,33 @@ class ProcessCorrelationIdProcessorTest extends TestCase
 {
     public function testRegularCases(): void
     {
-        $fieldName = 'some_field_name';
+        $testFieldName = 'some_field_name';
 
-        $initProcessCorrelationId = 'init_proc_cor_id';
-        $activeProcessCorrelationId1 = 'active_proc_cor_id_1';
-        $activeProcessCorrelationId2 = 'active_proc_cor_id_2';
+        $testInitProcessCorrelationId = 'init_proc_cor_id';
+        $testActiveProcessCorrelationId1 = 'active_proc_cor_id_1';
+        $testActiveProcessCorrelationId2 = 'active_proc_cor_id_2';
 
-        $processor = new ProcessCorrelationIdProcessor($fieldName);
+        $processor = new ProcessCorrelationIdProcessor($testFieldName);
 
         $record = $processor(['key' => 'val']);
         $this->assertSame(['key' => 'val'], $record);
 
-        $processor->setInitialProcessCorrelationId($initProcessCorrelationId);
+        $processor->setInitialProcessCorrelationId($testInitProcessCorrelationId);
         $record = $processor(['key' => 'val']);
         $this->assertSame(
             [
                 'key' => 'val',
-                'extra' => [$fieldName => $initProcessCorrelationId]
+                'extra' => [$testFieldName => $testInitProcessCorrelationId]
             ],
             $record
         );
 
-        $processor->activateProcessCorrelationId($activeProcessCorrelationId1);
+        $processor->activateProcessCorrelationId($testActiveProcessCorrelationId1);
         $record = $processor(['key' => 'val']);
         $this->assertSame(
             [
                 'key' => 'val',
-                'extra' => [$fieldName => $activeProcessCorrelationId1]
+                'extra' => [$testFieldName => $testActiveProcessCorrelationId1]
             ],
             $record
         );
@@ -47,17 +47,17 @@ class ProcessCorrelationIdProcessorTest extends TestCase
         $this->assertSame(
             [
                 'key' => 'val',
-                'extra' => [$fieldName => $initProcessCorrelationId]
+                'extra' => [$testFieldName => $testInitProcessCorrelationId]
             ],
             $record
         );
 
-        $processor->activateProcessCorrelationId($activeProcessCorrelationId2);
+        $processor->activateProcessCorrelationId($testActiveProcessCorrelationId2);
         $record = $processor(['key' => 'val']);
         $this->assertSame(
             [
                 'key' => 'val',
-                'extra' => [$fieldName => $activeProcessCorrelationId2]
+                'extra' => [$testFieldName => $testActiveProcessCorrelationId2]
             ],
             $record
         );
@@ -65,18 +65,18 @@ class ProcessCorrelationIdProcessorTest extends TestCase
 
     public function testWithoutInitialCall(): void
     {
-        $fieldName = 'some_field_name';
+        $testFieldName = 'some_field_name';
 
-        $activeProcessCorrelationId1 = 'active_proc_cor_id_1';
+        $testActiveProcessCorrelationId1 = 'active_proc_cor_id_1';
 
-        $processor = new ProcessCorrelationIdProcessor($fieldName);
+        $processor = new ProcessCorrelationIdProcessor($testFieldName);
 
-        $processor->activateProcessCorrelationId($activeProcessCorrelationId1);
+        $processor->activateProcessCorrelationId($testActiveProcessCorrelationId1);
         $record = $processor(['key' => 'val']);
         $this->assertSame(
             [
                 'key' => 'val',
-                'extra' => [$fieldName => $activeProcessCorrelationId1]
+                'extra' => [$testFieldName => $testActiveProcessCorrelationId1]
             ],
             $record
         );

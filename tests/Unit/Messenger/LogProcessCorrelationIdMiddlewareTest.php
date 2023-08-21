@@ -20,127 +20,138 @@ class LogProcessCorrelationIdMiddlewareTest extends TestCase
 {
     public function testWithProcessCorrelationIdStamp(): void
     {
-        $message = new DummyMessage('Some Message');
+        $testMessage = new DummyMessage('Some Message');
 
-        $loggerProcessor = $this->createMock(ProcessCorrelationIdProcessor::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $loggerProcessorMock = $this->createMock(ProcessCorrelationIdProcessor::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
 
         $messageBus = new MessageBus([
-            new LogProcessCorrelationIdMiddleware($loggerProcessor, $logger),
+            new LogProcessCorrelationIdMiddleware($loggerProcessorMock, $loggerMock),
         ]);
 
-        $processCorrelationId = 'pr_cor_id';
+        $testProcessCorrelationId = 'pr_cor_id';
 
-        $loggerProcessor->expects($this->exactly(1))
+        $loggerProcessorMock
+            ->expects($this->exactly(1))
             ->method('activateProcessCorrelationId')
-            ->with($this->identicalTo($processCorrelationId));
+            ->with($this->identicalTo($testProcessCorrelationId));
 
-        $loggerProcessor->expects($this->never())
+        $loggerProcessorMock
+            ->expects($this->never())
             ->method('resetToInitialProcessCorrelationId');
 
-        $logger->expects($this->never())
+        $loggerMock
+            ->expects($this->never())
             ->method('error');
 
         $messageBus->dispatch(
-            new Envelope($message, [new ProcessCorrelationIdStamp($processCorrelationId)])
+            new Envelope($testMessage, [new ProcessCorrelationIdStamp($testProcessCorrelationId)])
         );
     }
 
     public function testWithoutProcessCorrelationIdStamp(): void
     {
-        $message = new DummyMessage('Some Message');
+        $testMessage = new DummyMessage('Some Message');
 
-        $loggerProcessor = $this->createMock(ProcessCorrelationIdProcessor::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $loggerProcessorMock = $this->createMock(ProcessCorrelationIdProcessor::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
 
         $messageBus = new MessageBus([
-            new LogProcessCorrelationIdMiddleware($loggerProcessor, $logger),
+            new LogProcessCorrelationIdMiddleware($loggerProcessorMock, $loggerMock),
         ]);
 
-        $loggerProcessor->expects($this->never())
+        $loggerProcessorMock
+            ->expects($this->never())
             ->method('activateProcessCorrelationId');
 
-        $logger->expects($this->never())
+        $loggerMock
+            ->expects($this->never())
             ->method('error');
 
-        $messageBus->dispatch($message);
+        $messageBus->dispatch($testMessage);
     }
 
     public function testWithProcessCorrelationIdAndConsumedByWorkerStampStamp(): void
     {
-        $message = new DummyMessage('Some Message');
+        $testMessage = new DummyMessage('Some Message');
 
-        $loggerProcessor = $this->createMock(ProcessCorrelationIdProcessor::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $loggerProcessorMock = $this->createMock(ProcessCorrelationIdProcessor::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
 
-        $setConsumedByWorkerStampMiddleware = $this->createMock(MiddlewareInterface::class);
+        $setConsumedByWorkerStampMiddlewareMock = $this->createMock(MiddlewareInterface::class);
 
         $messageBus = new MessageBus([
-            new LogProcessCorrelationIdMiddleware($loggerProcessor, $logger),
-            $setConsumedByWorkerStampMiddleware,
+            new LogProcessCorrelationIdMiddleware($loggerProcessorMock, $loggerMock),
+            $setConsumedByWorkerStampMiddlewareMock,
         ]);
 
-        $setConsumedByWorkerStampMiddleware->expects($this->exactly(1))
-        ->method('handle')
-        ->willReturnCallback(static function (Envelope $envelope, StackInterface $stack): Envelope {
-            if ($envelope->last(ConsumedByWorkerStamp::class) === null) {
-                $envelope = $envelope->with(new ConsumedByWorkerStamp());
-            }
-            return $stack->next()->handle($envelope, $stack);
-        });
+        $setConsumedByWorkerStampMiddlewareMock
+            ->expects($this->exactly(1))
+            ->method('handle')
+            ->willReturnCallback(static function (Envelope $envelope, StackInterface $stack): Envelope {
+                if ($envelope->last(ConsumedByWorkerStamp::class) === null) {
+                    $envelope = $envelope->with(new ConsumedByWorkerStamp());
+                }
 
-        $processCorrelationId = 'pr_cor_id';
+                return $stack->next()->handle($envelope, $stack);
+            });
 
-        $loggerProcessor->expects($this->exactly(1))
+        $testProcessCorrelationId = 'pr_cor_id';
+
+        $loggerProcessorMock
+            ->expects($this->exactly(1))
             ->method('activateProcessCorrelationId')
-            ->with($this->identicalTo($processCorrelationId));
+            ->with($this->identicalTo($testProcessCorrelationId));
 
-        $loggerProcessor->expects($this->exactly(1))
+        $loggerProcessorMock
+            ->expects($this->exactly(1))
             ->method('resetToInitialProcessCorrelationId');
 
-        $logger->expects($this->never())
+        $loggerMock
+            ->expects($this->never())
             ->method('error');
 
         $messageBus->dispatch(
-            new Envelope($message, [new ProcessCorrelationIdStamp($processCorrelationId)])
+            new Envelope($testMessage, [new ProcessCorrelationIdStamp($testProcessCorrelationId)])
         );
     }
 
     public function testThrowException(): void
     {
-        $message = new DummyMessage('Some Message');
+        $testMessage = new DummyMessage('Some Message');
 
-        $loggerProcessor = $this->createMock(ProcessCorrelationIdProcessor::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $testProcessCorrelationId = 'pr_cor_id';
 
-        $throwExceptionMiddleware = $this->createMock(MiddlewareInterface::class);
+        $loggerProcessorMock = $this->createMock(ProcessCorrelationIdProcessor::class);
+        $loggerProcessorMock
+            ->expects($this->exactly(1))
+            ->method('activateProcessCorrelationId')
+            ->with($this->identicalTo($testProcessCorrelationId));
+        $loggerProcessorMock
+            ->expects($this->exactly(1))
+            ->method('resetToInitialProcessCorrelationId');
 
-        $messageBus = new MessageBus([
-            new LogProcessCorrelationIdMiddleware($loggerProcessor, $logger),
-            $throwExceptionMiddleware,
-        ]);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock
+            ->expects($this->exactly(1))
+            ->method('error');
 
-        $throwExceptionMiddleware->expects($this->exactly(1))
+        $throwExceptionMiddlewareMock = $this->createMock(MiddlewareInterface::class);
+        $throwExceptionMiddlewareMock
+            ->expects($this->exactly(1))
             ->method('handle')
             ->willThrowException(new \Exception('Test Exception'));
 
-        $processCorrelationId = 'pr_cor_id';
-
-        $loggerProcessor->expects($this->exactly(1))
-            ->method('activateProcessCorrelationId')
-            ->with($this->identicalTo($processCorrelationId));
-
-        $loggerProcessor->expects($this->exactly(1))
-            ->method('resetToInitialProcessCorrelationId');
-
-        $logger->expects($this->exactly(1))
-            ->method('error');
+        $messageBus = new MessageBus([
+            new LogProcessCorrelationIdMiddleware($loggerProcessorMock, $loggerMock),
+            $throwExceptionMiddlewareMock,
+        ]);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Test Exception');
 
         $messageBus->dispatch(
-            new Envelope($message, [new ProcessCorrelationIdStamp($processCorrelationId)])
+            new Envelope($testMessage, [new ProcessCorrelationIdStamp($testProcessCorrelationId)])
         );
     }
 }

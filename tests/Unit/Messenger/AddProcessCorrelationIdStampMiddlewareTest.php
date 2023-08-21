@@ -87,12 +87,12 @@ class AddProcessCorrelationIdStampMiddlewareTest extends TestCase
         $dispatchAfterCurrentBus = new DispatchAfterCurrentBusMiddleware();
         $addProcessCorrelationIdStampMiddleware = new AddProcessCorrelationIdStampMiddleware($processCorrelationId);
 
-        $handlingMiddleware = $this->createMock(MiddlewareInterface::class);
+        $handlingMiddlewareMock = $this->createMock(MiddlewareInterface::class);
 
         $eventBus = new MessageBus([
             $addProcessCorrelationIdStampMiddleware,
             $dispatchAfterCurrentBus,
-            $handlingMiddleware,
+            $handlingMiddlewareMock,
         ]);
 
         $messageBus = new MessageBus([
@@ -103,11 +103,12 @@ class AddProcessCorrelationIdStampMiddlewareTest extends TestCase
                 $secondEvent,
                 $thirdEvent,
             ]),
-            $handlingMiddleware,
+            $handlingMiddlewareMock,
         ]);
 
         $series = [];
-        $handlingMiddleware->expects($this->exactly(12))
+        $handlingMiddlewareMock
+            ->expects($this->exactly(12))
             ->method('handle')
             ->with(
                 $this->callback(function (Envelope $envelope) use (&$series) {
@@ -177,12 +178,12 @@ class AddProcessCorrelationIdStampMiddlewareTest extends TestCase
         $dispatchAfterCurrentBus = new DispatchAfterCurrentBusMiddleware();
         $addProcessCorrelationIdStampMiddleware = new AddProcessCorrelationIdStampMiddleware($processCorrelationId);
 
-        $handlingMiddleware = $this->createMock(MiddlewareInterface::class);
+        $handlingMiddlewareMock = $this->createMock(MiddlewareInterface::class);
 
         $eventBus = new MessageBus([
             $addProcessCorrelationIdStampMiddleware,
             $dispatchAfterCurrentBus,
-            $handlingMiddleware,
+            $handlingMiddlewareMock,
         ]);
 
         $messageBus = new MessageBus([
@@ -193,11 +194,12 @@ class AddProcessCorrelationIdStampMiddlewareTest extends TestCase
                 new Envelope($secondEvent, [new DispatchAfterCurrentBusStamp()]),
                 $thirdEvent, // Not in a new transaction
             ]),
-            $handlingMiddleware,
+            $handlingMiddlewareMock,
         ]);
 
         $series = [];
-        $handlingMiddleware->expects($this->exactly(12))
+        $handlingMiddlewareMock
+            ->expects($this->exactly(12))
             ->method('handle')
             ->with(
                 $this->callback(function (Envelope $envelope) use (&$series) {
@@ -270,12 +272,12 @@ class AddProcessCorrelationIdStampMiddlewareTest extends TestCase
         $dispatchAfterCurrentBusMiddleware = new DispatchAfterCurrentBusMiddleware();
         $addProcessCorrelationIdStampMiddleware = new AddProcessCorrelationIdStampMiddleware($processCorrelationId);
 
-        $handlingMiddleware = $this->createMock(MiddlewareInterface::class);
+        $handlingMiddlewareMock = $this->createMock(MiddlewareInterface::class);
 
         $eventBus = new MessageBus([
             $addProcessCorrelationIdStampMiddleware,
             $dispatchAfterCurrentBusMiddleware,
-            $handlingMiddleware,
+            $handlingMiddlewareMock,
         ]);
 
         $messageBus = new MessageBus([
@@ -286,11 +288,12 @@ class AddProcessCorrelationIdStampMiddlewareTest extends TestCase
                 $secondEvent,
                 $thirdEvent,
             ]),
-            $handlingMiddleware,
+            $handlingMiddlewareMock,
         ]);
 
         $series = [];
-        $handlingMiddleware->expects($this->exactly(9))
+        $handlingMiddlewareMock
+            ->expects($this->exactly(9))
             ->method('handle')
             ->with(
                 $this->callback(function (Envelope $envelope) use (&$series) {
@@ -374,12 +377,12 @@ class AddProcessCorrelationIdStampMiddlewareTest extends TestCase
         $dispatchAfterCurrentBusMiddleware = new DispatchAfterCurrentBusMiddleware();
         $addProcessCorrelationIdStampMiddleware = new AddProcessCorrelationIdStampMiddleware($processCorrelationId);
 
-        $handlingMiddleware = $this->createMock(MiddlewareInterface::class);
+        $handlingMiddlewareMock = $this->createMock(MiddlewareInterface::class);
 
         $eventBus = new MessageBus([
             $addProcessCorrelationIdStampMiddleware,
             $dispatchAfterCurrentBusMiddleware,
-            $handlingMiddleware,
+            $handlingMiddlewareMock,
         ]);
 
         $messageBus = new MessageBus([
@@ -390,11 +393,11 @@ class AddProcessCorrelationIdStampMiddlewareTest extends TestCase
                 new Envelope($secondEvent, [new DispatchAfterCurrentBusStamp()]),
                 $thirdEvent,
             ]),
-            $handlingMiddleware,
+            $handlingMiddlewareMock,
         ]);
 
         $series = [];
-        $handlingMiddleware->expects($this->exactly(10))
+        $handlingMiddlewareMock->expects($this->exactly(10))
             ->method('handle')
             ->with(
                 $this->callback(function (Envelope $envelope) use (&$series) {

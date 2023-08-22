@@ -7,29 +7,19 @@ namespace Pinai4\ProcessCorrelationIdBundle\Tests\Functional\DependencyInjection
 use Pinai4\ProcessCorrelationIdBundle\Pinai4ProcessCorrelationIdBundle;
 use Pinai4\ProcessCorrelationIdBundle\Tests\Fixtures\CompilerPassDataCollector;
 use Pinai4\ProcessCorrelationIdBundle\Tests\Fixtures\CompilerPassDataCollectorPass;
+use Pinai4\ProcessCorrelationIdBundle\Tests\Functional\InternalKernelTestCase;
 use Pinai4\ProcessCorrelationIdBundle\Tests\TestKernel;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class MessengerBusesAutoconfigForDefaultMiddlewaresStackPassTest extends KernelTestCase
+class MessengerBusesAutoconfigForDefaultMiddlewaresStackPassTest extends InternalKernelTestCase
 {
-    protected static function getKernelClass(): string
-    {
-        return TestKernel::class;
-    }
-
-    /**
-     * @param array<string, string> $options
-     */
     protected static function createKernel(array $options = []): KernelInterface
     {
         /** @var TestKernel $kernel */
         $kernel = parent::createKernel($options);
         $kernel->addTestBundle(Pinai4ProcessCorrelationIdBundle::class);
         $kernel->addTestCompilerPass(new CompilerPassDataCollectorPass());
-        $kernel->handleOptions($options);
-
         return $kernel;
     }
 

@@ -50,10 +50,8 @@ class TestKernel extends Kernel
 
     /**
      * Internal config.
-     *
-     * @var bool
      */
-    private $clearCache = true;
+    private bool $clearCacheOnShutdown = true;
 
     public function __construct(string $environment, bool $debug)
     {
@@ -182,10 +180,16 @@ class TestKernel extends Kernel
     {
         parent::shutdown();
 
-        if (!$this->clearCache) {
+        if (!$this->clearCacheOnShutdown) {
             return;
         }
 
+        $this->clearCache();
+
+    }
+
+    public function clearCache(): void
+    {
         $cacheDirectory = $this->getCacheDir();
         $logDirectory = $this->getLogDir();
 
@@ -200,8 +204,8 @@ class TestKernel extends Kernel
         }
     }
 
-    public function setClearCacheAfterShutdown(bool $clearCache): void
+    public function setClearCacheOnShutdown(bool $clearCacheOnShutdown): void
     {
-        $this->clearCache = $clearCache;
+        $this->clearCacheOnShutdown = $clearCacheOnShutdown;
     }
 }

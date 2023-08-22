@@ -12,31 +12,21 @@ use Pinai4\ProcessCorrelationIdBundle\Messenger\LogProcessCorrelationIdMiddlewar
 use Pinai4\ProcessCorrelationIdBundle\Monolog\ProcessCorrelationIdProcessor;
 use Pinai4\ProcessCorrelationIdBundle\Pinai4ProcessCorrelationIdBundle;
 use Pinai4\ProcessCorrelationIdBundle\ProcessCorrelationId;
+use Pinai4\ProcessCorrelationIdBundle\Tests\Functional\InternalKernelTestCase;
 use Pinai4\ProcessCorrelationIdBundle\Tests\TestKernel;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Messenger\MessageBus;
 
-class BundleInitializationTest extends KernelTestCase
+class BundleInitializationTest extends InternalKernelTestCase
 {
-    protected static function getKernelClass(): string
-    {
-        return TestKernel::class;
-    }
-
-    /**
-     * @param array<string, string> $options
-     */
     protected static function createKernel(array $options = []): KernelInterface
     {
         /** @var TestKernel $kernel */
         $kernel = parent::createKernel($options);
         $kernel->addTestBundle(Pinai4ProcessCorrelationIdBundle::class);
-        $kernel->handleOptions($options);
-
         return $kernel;
     }
 
